@@ -11,7 +11,7 @@ exports.getPage = (req, res) => {
 
 exports.getResponse = async (req, res) => {
     const data = req.body.data;
-    // console.log(data);
+    console.log(data);
     try {
         const completion = await openai.createCompletion({
             model: "text-davinci-003",
