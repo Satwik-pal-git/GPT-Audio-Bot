@@ -5,7 +5,7 @@ const configuration = new Configuration({
 })
 const openai = new OpenAIApi(configuration);
 
-exports.getPage = async (req, res) => {
+exports.getPage = (req, res) => {
     res.render("index");
 }
 
@@ -22,7 +22,6 @@ exports.getResponse = async (req, res) => {
         })
         var response = completion.data.choices[0].text;
         response = response.replace(/^\s+|\s+$/g, '');
-
         res.status(200).send(response);
     }
     catch (e) {

@@ -34,7 +34,7 @@ recognition.onresult = async (event) => {
         "Content-Type": "application/json",
     };
 
-    await axios.post('https://gpt-audio-bot.vercel.app', formData, { headers }).then((res) => {
+    await axios.post('/', formData, { headers }).then((res) => {
         // console.log("done sending ", res);
         console.log("the GPT ans= ", res.data);
         // const utteracnce= new SpeechSynthesisUtterance();
