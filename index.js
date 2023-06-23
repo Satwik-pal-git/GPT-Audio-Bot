@@ -21,17 +21,15 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
 })
 const openai = new OpenAIApi(configuration);
-var GptResponse = '', speechData = '';
+
 app.get("/", (req, res) => {
-    say.speak(GptResponse);
-    res.render("index", { GPT_response: GptResponse, newSpeech: speechData });
+    res.render("index",);
 })
 
 app.post("/", async (req, res) => {
-    const data = req.body.Speech;
+    const data = req.body.data;
     // console.log(data);
     try {
-        // const res= await axios.get()
         const completion = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: data,
@@ -41,18 +39,16 @@ app.post("/", async (req, res) => {
         })
         var response = completion.data.choices[0].text;
         response = response.replace(/^\s+|\s+$/g, '');
-        // console.log("response", response);
-        GptResponse = response;
-        speechData = data;
-        res.redirect('/');
-    } catch (e) {
+
+        res.status(200).send(response);
+    }
+    catch (e) {
         console.log("Error has occurred: " + e.message);
         console.log(e)
     }
-
 })
 
 const port = 3000 || process.env.PORT
 app.listen(port, () => {
-    console.log('listening on port' + port);
+    console.log('listening on port ' + port);
 })
