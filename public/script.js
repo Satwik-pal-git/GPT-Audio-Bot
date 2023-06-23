@@ -24,7 +24,7 @@ recognition.onerror = () => {
 }
 const synth = window.speechSynthesis
 
-recognition.onresult = async (event) => {
+recognition.onresult = (event) => {
     var current = event.resultIndex;
     var transcript = event.results[current][0].transcript;
     const formData = {
@@ -32,10 +32,9 @@ recognition.onresult = async (event) => {
     }
     axios({
         method: 'post',
-        url: '/',
+        url: 'https://gpt-audio-bot.vercel.app/',
         data: formData
-    });
-    await axios.post('/', formData).then((res) => {
+    }).then((res) => {
         // console.log("done sending ", res);
         console.log("the GPT ans= ", res.data);
         // const utteracnce= new SpeechSynthesisUtterance();
