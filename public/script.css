@@ -9,8 +9,21 @@ h2{
     justify-content: center;
     align-items: center;
 }
+#msg{
+    /* margin-left: 1vw; */
+    margin-right: 1vw;
+}
 #output{
     margin-left: 3vw;
+}
+.bottom{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 1vh;
 }
 .footer{
     /* margin : 1vw; */
@@ -26,14 +39,15 @@ h2{
     overflow-y: scroll;
     height: 80vh;
 }
-
-.footer{
-    width: 100vw;
-    background-color: white;
-    position: fixed;
-    bottom: 0;
-    padding-bottom: 1vh;
+.instr{
+    margin: 1vw;
+    color: red;
+    font-size: medium;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif;
+    font-stretch: expanded;
 }
+
 button{
     padding: 0.5vw;
 }
@@ -111,5 +125,15 @@ button{
       -webkit-transform: scale(1.5, 1.5);
       opacity: 0;
     }
+}
+
+#msg .msgbody:nth-child(even) {
+    background-color: #b1abab98;
+    border-radius: 5px;
+    padding: 0.5vw;
+
   }
   
+#msg .msgbody:nth-child(odd) {
+    background-color: #ffffff;
+  }

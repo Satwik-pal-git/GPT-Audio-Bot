@@ -9,17 +9,18 @@ var startbtn = $('#start-btn')
 var abortBtn = $(`#abortBtn`);
 
 recognition.onstart = () => {
-    // $('#rings').addClass('pulse-ring');
-    // startbtn.text("Stop");
+    $('#rings').addClass('pulse-ring');
 }
 
-recognition.onspeechend = () => {
-    // $('#rings').removeClass('pulse-ring');
-    // startbtn.text("Start");
-}
+// recognition.onspeechend = () => {
+//     console.log('end....');
+//     $('#rings').removeClass('pulse-ring');
+// }
+
 recognition.onerror = () => {
-    // $('#rings').removeClass('pulse-ring');
-    // startbtn.text("Start over");
+    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i> Error Occured, Please try again!</div>`;
+    $('.bottom').append(newInfor);
+    $('#rings').removeClass('pulse-ring');
 }
 const synth = window.speechSynthesis
 
@@ -35,7 +36,7 @@ recognition.onresult = async (event) => {
         console.log("the GPT ans= ", res.data);
         // const utteracnce= new SpeechSynthesisUtterance();
         const utterThis = new SpeechSynthesisUtterance(res.data);
-        var newChat = `<div>
+        var newChat = `<div class="msgbody">
                         <div class="text"><span class="direction">You: </span> <span class="response" id="input">${transcript}</span> </div>
                         <div class="text"><span class="direction">Bot:</span> <span class="response" id="output">${res.data}</span></div>
                     </div>`
@@ -57,17 +58,15 @@ $('#start-btn').click(() => {
         recognition.stop();
         // console.log('removed');
     }
-    // var text = startbtn.text();
-    // if (text === 'Start') {
-    //     startbtn.text('Stop');
-    // } else {
-    //     startbtn.text('Start');
-    // }
+    if ($('.bottom').has('.instr').length > 0) {
+        $('.bottom .instr').remove();
+    }
 })
 abortBtn.click(() => {
     if (synth.speaking) {
         // SpeechSyn is currently speaking, cancel the current utterance(s)
         synth.cancel();
         console.log("Speech recognition aborted.");
+
     }
 }); 
