@@ -18,7 +18,7 @@ recognition.onstart = () => {
 // }
 
 recognition.onerror = () => {
-    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i>Error Occured, Speech recognition is not supported in this browser! Try again using Chrome web browser </div>`;
+    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i>Error Occured, Speech recognition is not supported! Try again using Chrome web browser & Allow the microphone permission</div>`;
     $('.bottom').append(newInfor);
     $('#rings').removeClass('pulse-ring');
 }
@@ -80,6 +80,5 @@ abortBtn.click(() => {
         // SpeechSyn is currently speaking, cancel the current utterance(s)
         synth.cancel();
         console.log("Speech recognition aborted.");
-
     }
 }); 
