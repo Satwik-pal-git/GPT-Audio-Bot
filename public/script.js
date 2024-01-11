@@ -18,7 +18,7 @@ recognition.onstart = () => {
 // }
 
 recognition.onerror = () => {
-    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i> Error Occured, Please try again!</div>`;
+    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i>Error Occured, Speech recognition is not supported in this browser! Try again using Chrome web browser </div>`;
     $('.bottom').append(newInfor);
     $('#rings').removeClass('pulse-ring');
 }
@@ -43,7 +43,7 @@ recognition.onresult = (event) => {
         }
     }).then((res) => {
         // console.log("done sending ", res);
-        console.log("the GPT ans= ", res.data);
+        // console.log("the GPT ans= ", res.data);
         // const utteracnce= new SpeechSynthesisUtterance();
         const utterThis = new SpeechSynthesisUtterance(res.data);
         var newChat = `<div class="msgbody">
