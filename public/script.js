@@ -33,9 +33,16 @@ recognition.onresult = (event) => {
     axios({
         method: 'post',
         url: 'https://gpt-audio-bot-wunf.vercel.app/',
-        data: formData
+        data: formData,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Authorization': key,
+            withCredentials: true,
+            mode: 'no-cors',
+        }
     }).then((res) => {
-        console.log("done sending ", res);
+        // console.log("done sending ", res);
         console.log("the GPT ans= ", res.data);
         // const utteracnce= new SpeechSynthesisUtterance();
         const utterThis = new SpeechSynthesisUtterance(res.data);
