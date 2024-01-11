@@ -32,10 +32,10 @@ recognition.onresult = (event) => {
     }
     axios({
         method: 'post',
-        url: 'https://gpt-audio-bot.vercel.app/',
+        url: 'https://gpt-audio-bot-wunf.vercel.app/',
         data: formData
     }).then((res) => {
-        // console.log("done sending ", res);
+        console.log("done sending ", res);
         console.log("the GPT ans= ", res.data);
         // const utteracnce= new SpeechSynthesisUtterance();
         const utterThis = new SpeechSynthesisUtterance(res.data);
@@ -49,11 +49,13 @@ recognition.onresult = (event) => {
     }).catch(error => console.log(error));
 }
 var ringsDiv = $('#rings');
+
 $('#start-btn').click(() => {
     var cls = ringsDiv.attr('class');
     // console.log(cls);
     if (cls === undefined || cls === '') {
         recognition.start();
+        console.log(' recognition started: ');
         ringsDiv.addClass('pulse-ring');
         // console.log('added');
     } else {
@@ -65,6 +67,7 @@ $('#start-btn').click(() => {
         $('.bottom .instr').remove();
     }
 })
+
 abortBtn.click(() => {
     if (synth.speaking) {
         // SpeechSyn is currently speaking, cancel the current utterance(s)
