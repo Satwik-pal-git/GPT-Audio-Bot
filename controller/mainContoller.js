@@ -12,7 +12,8 @@ const reply = async (data) => {
 
         const result = await model.generateContent(data);
         const textToUtter = result.response.text();
-        const textGenerated = markdown.toHTML(textToUtter);
+        let textGenerated = markdown.toHTML(textToUtter);
+        textGenerated = textGenerated.replace(/^<p>|<\/p>$/g, "");
         return { textGenerated, textToUtter };
     } catch (error) {
         console.log("error ❌❌ ", error);
