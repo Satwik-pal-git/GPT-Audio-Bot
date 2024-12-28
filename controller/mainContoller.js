@@ -1,30 +1,29 @@
-const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY
-})
-const openai = new OpenAIApi(configuration);
+var markdown = require("markdown").markdown;
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 exports.getPage = (req, res) => {
     res.render("index");
 }
+
 const reply = async (data) => {
-    const completion = await openai.createCompletion({
-        model: "gpt-3.5-turbo-instruct",
-        prompt: data,
-        max_tokens: 3000,
-    })
-    // console.log(completion)
-    return completion;
+    try {
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent(data);
+        const textToUtter = result.response.text();
+        const textGenerated = markdown.toHTML(textToUtter);
+        return { textGenerated, textToUtter };
+    } catch (error) {
+        console.log("error ❌❌ ", error);
+    }
 }
 exports.getResponse = async (req, res) => {
-    const data = req.body.data;
-    // console.log(data);
-    const resp = await reply(data);
-    var response = resp.data.choices[0].text;
-    response = response.replace(/^\s+|\s+$/g, '');
-    res.status(200).send(response);
-    // if (resp.data.error) {
-    //     res.status(200).send("Error Occured! ", resp.data.eror.message);
-    // } else {
-    // }
+    try {
+        const data = req.body.data;
+        const { textGenerated, textToUtter } = await reply(data);
+        res.status(200).json({ textGenerated, textToUtter });
+    } catch (error) {
+        console.log("error ❌ ", error);
+    }
 }

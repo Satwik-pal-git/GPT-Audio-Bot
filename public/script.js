@@ -17,8 +17,9 @@ recognition.onstart = () => {
 //     $('#rings').removeClass('pulse-ring');
 // }
 
-recognition.onerror = () => {
-    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i>Error Occured, Speech recognition is not supported! Try again using Chrome web browser & Allow the microphone permission</div>`;
+recognition.onerror = (event) => {
+    console.error("Speech Recognition Error: ", event.error);
+    const newInfor = `<div class="instr"><i class="fa-sharp fa-solid fa-circle-exclamation"></i>Error Occured, Speech recognition is not supported! Try again using Google Chrome or any other web browser & Allow the microphone permission</div>`;
     $('.bottom').append(newInfor);
     $('#rings').removeClass('pulse-ring');
 }
@@ -30,9 +31,14 @@ recognition.onresult = (event) => {
     const formData = {
         'data': transcript
     }
+
+    const baseURL = window.location.hostname === 'localhost'
+        ? 'http://localhost:3000/'
+        : 'https://gpt-audio-bot-wunf.vercel.app/';
+
     axios({
         method: 'post',
-        url: 'https://gpt-audio-bot-wunf.vercel.app/',
+        url: `${baseURL}`,
         data: formData,
         headers: {
             'Access-Control-Allow-Origin': '*',
@@ -42,13 +48,12 @@ recognition.onresult = (event) => {
             mode: 'no-cors',
         }
     }).then((res) => {
-        // console.log("done sending ", res);
-        // console.log("the GPT ans= ", res.data);
-        // const utteracnce= new SpeechSynthesisUtterance();
-        const utterThis = new SpeechSynthesisUtterance(res.data);
+        let textToUtter = res.data.textToUtter;
+        textToUtter = textToUtter.replace(/\*/g, '');
+        const utterThis = new SpeechSynthesisUtterance(textToUtter);
         var newChat = `<div class="msgbody">
                         <div class="text"><span class="direction">You: </span> <span class="response" id="input">${transcript}</span> </div>
-                        <div class="text"><span class="direction">Bot:</span> <span class="response" id="output">${res.data}</span></div>
+                        <div class="text"><span class="direction">Bot:</span> <span class="response" id="output">${res.data.textGenerated}</span></div>
                     </div>`
         const msgs = document.getElementById('msg');
         document.getElementById('msg').innerHTML += (newChat);
@@ -59,16 +64,13 @@ var ringsDiv = $('#rings');
 
 $('#start-btn').click(() => {
     var cls = ringsDiv.attr('class');
-    // console.log(cls);
     if (cls === undefined || cls === '') {
         recognition.start();
-        console.log(' recognition started: ');
+        // console.log(' recognition started: ');
         ringsDiv.addClass('pulse-ring');
-        // console.log('added');
     } else {
         ringsDiv.removeClass();
         recognition.stop();
-        // console.log('removed');
     }
     if ($('.bottom').has('.instr').length > 0) {
         $('.bottom .instr').remove();
@@ -79,6 +81,6 @@ abortBtn.click(() => {
     if (synth.speaking) {
         // SpeechSyn is currently speaking, cancel the current utterance(s)
         synth.cancel();
-        console.log("Speech recognition aborted.");
+        // console.log("Speech recognition aborted.");
     }
 }); 
